@@ -96,7 +96,11 @@ class Dinosaur(Sprite):
             time_to_show = round((self.shield_time_up - pygame.time.get_ticks()) / 100, 2)
             if time_to_show >= 0 and self.show_text:   
             # mostrar este tiempo en el juego
-                print(time_to_show)
+                font = pygame.font.Font(FONT_STYLE, 25)
+                text = font.render(f"Remaining special power time: {time_to_show}", True, (2, 65, 35))
+                text_rect = text.get_rect()
+                text_rect.center = (550, 50)
+                screen.blit(text, text_rect)
             else:
                 self.shield = False
                 self.type = DEFAULT_TYPE 
