@@ -125,6 +125,7 @@ class Dinosaur(Sprite):
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
         if self.dino_hammer == True:
+            self.hammer_rect.x += 20
             screen.blit(HAMMER, (self.hammer_rect.x, self.hammer_rect.y))
 
     def check_invicibility(self, screen):

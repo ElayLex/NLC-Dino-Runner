@@ -73,5 +73,5 @@ DEFAULT_TYPE = "default"
 SHIELD_TYPE = "shield"
 HAMMER_TYPE = "hammer"
 
-# pygame.mixer.load('Other/1.mp3')
-# pygame.mixer.music.play(-1) #PARA BUCLE INFINITO = -1
+# MUSIC = pygame.mixer.load('Other/1.mp3')
+# # pygame.mixer.music.play(-1) #PARA BUCLE INFINITO = -1
