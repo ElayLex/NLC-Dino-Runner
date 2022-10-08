@@ -1,13 +1,13 @@
 import pygame
 
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, DUCKING , DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, DUCKING_SHIELD, JUMPING_SHIELD
+from dino_runner.utils.constants import RUNNING, DUCKING , DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, DUCKING_SHIELD, JUMPING_SHIELD, HAMMER_TYPE, RUNNING_HAMMER, DUCKING_HAMMER, JUMPING_HAMMER
 from dino_runner.utils.constants import JUMPING
 
-DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
-JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
-
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+FONT_STYLE = 'freesansbold.ttf'
 
 
 class Dinosaur(Sprite):
@@ -91,5 +91,13 @@ class Dinosaur(Sprite):
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-    def check_invicibility(self):
-        pass   
+    def check_invicibility(self, screen):
+        if self.shield == True:
+            time_to_show = round((self.shield_time_up - pygame.time.get_ticks()) / 100, 2)
+            if time_to_show >= 0 and self.show_text:   
+            # mostrar este tiempo en el juego
+                print(time_to_show)
+            else:
+                self.shield = False
+                self.type = DEFAULT_TYPE 
+  
