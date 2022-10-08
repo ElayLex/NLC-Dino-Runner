@@ -3,10 +3,14 @@ import pygame
 from pygame.sprite import Sprite
 from dino_runner.utils.constants import RUNNING, DUCKING , DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, DUCKING_SHIELD, JUMPING_SHIELD, HAMMER_TYPE, RUNNING_HAMMER, DUCKING_HAMMER, JUMPING_HAMMER
 from dino_runner.utils.constants import JUMPING
+from dino_runner.utils.constants import HAMMER
 
 DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
 JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
 RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+HAMMER_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING, HAMMER_TYPE: RUNNING}
+THROW_HAMMER = {HAMMER}
+
 FONT_STYLE = 'freesansbold.ttf'
 
 
@@ -22,16 +26,22 @@ class Dinosaur(Sprite):
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
+        self.image = HAMMER
+        self.hammer_rect = self.image.get_rect()
+        self.hammer_rect.x = self.X_POS
+        self.hammer_rect.y = self.Y_POS
         self.step_index = 0
         self.dino_run = True
         self.dino_duck = False
         self.dino_jum = False
+        self.dino_hammer = False
         self.jump_vel = self.JUMP_VEL
         self.setup_state()
 
     def setup_state(self):
         self.has_power_up = False
         self.shield = False
+        self.hammer = False
         self.show_text = False
         self.shield_time_up = 0
 
@@ -42,6 +52,8 @@ class Dinosaur(Sprite):
             self.jump()
         elif self.dino_duck:
             self.duck()
+        elif self.dino_hammer:
+            self.hammmer()
 
     def update(self, user_imput):
         self.events()
@@ -50,10 +62,20 @@ class Dinosaur(Sprite):
             self.dino_jum = True
             self.dino_run = False
             self.dino_duck = False
+            self.dino_hammer = False
         elif user_imput[pygame.K_DOWN] and not self.dino_jum:
             self.dino_duck = True
             self.dino_run = False
             self.dino_jum = False
+            self.dino_hammer = False
+        elif user_imput[pygame.K_RIGHT]:
+            self.dino_duck = False
+            self.dino_run = False
+            self.dino_jum = False
+            self.dino_hammer = True
+
+            
+
         elif not self.dino_jum:
             self.dino_jum = False
             self.dino_run = True
@@ -67,8 +89,7 @@ class Dinosaur(Sprite):
         if self.dino_jum:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 0.8
-
-        
+ 
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y = self.Y_POS
             self.dino_jum = False
@@ -87,6 +108,17 @@ class Dinosaur(Sprite):
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS_DUCK
         self.step_index += 1
+    
+    def hammmer(self):
+        self.image = HAMMER_IMG[self.type][self.step_index // 5]
+        self.hammer_rect = self.image.get_rect()
+        self.hammer_rect.x = self.X_POS
+        self.hammer_rect.y = self.Y_POS
+        self.step_index += 1
+        # self.image = THROW_HAMMER[self.type]
+        # if self.dino_hammer:
+        #     self.hammer_rect.x += self.jump_vel * 4
+        #     self.jump_vel += 0.8
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
