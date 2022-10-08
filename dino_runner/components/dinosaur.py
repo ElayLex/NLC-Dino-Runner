@@ -28,8 +28,8 @@ class Dinosaur(Sprite):
         self.dino_rect.y = self.Y_POS
         self.image = HAMMER
         self.hammer_rect = self.image.get_rect()
-        self.hammer_rect.x = self.X_POS
-        self.hammer_rect.y = self.Y_POS
+        self.hammer_rect.x = 600
+        self.hammer_rect.y = 400
         self.step_index = 0
         self.dino_run = True
         self.dino_duck = False
@@ -37,6 +37,8 @@ class Dinosaur(Sprite):
         self.dino_hammer = False
         self.jump_vel = self.JUMP_VEL
         self.setup_state()
+
+        # self.sound = pygame.mixer.Sound('Descargas/1.mp3')
 
     def setup_state(self):
         self.has_power_up = False
@@ -74,8 +76,6 @@ class Dinosaur(Sprite):
             self.dino_jum = False
             self.dino_hammer = True
 
-            
-
         elif not self.dino_jum:
             self.dino_jum = False
             self.dino_run = True
@@ -89,7 +89,9 @@ class Dinosaur(Sprite):
         if self.dino_jum:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 0.8
- 
+            
+            # self.sound.play()
+
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y = self.Y_POS
             self.dino_jum = False
@@ -115,13 +117,15 @@ class Dinosaur(Sprite):
         self.hammer_rect.x = self.X_POS
         self.hammer_rect.y = self.Y_POS
         self.step_index += 1
-        # self.image = THROW_HAMMER[self.type]
+        # self.image = THROW_HAMMER
         # if self.dino_hammer:
         #     self.hammer_rect.x += self.jump_vel * 4
         #     self.jump_vel += 0.8
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+        if self.dino_hammer == True:
+            screen.blit(HAMMER, (self.hammer_rect.x, self.hammer_rect.y))
 
     def check_invicibility(self, screen):
         if self.shield == True:
